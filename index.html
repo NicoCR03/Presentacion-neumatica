@@ -16,45 +16,23 @@
       <button id="prev" title="Anterior (←)" aria-label="Diapositiva anterior">←</button>
       <button id="indexBtn" title="Índice (O)"><span id="counter">01 / 20</span></button>
       <button id="next" title="Siguiente (→ o espacio)" aria-label="Diapositiva siguiente">→</button>
-      <span id="slideTime" class="quiet"></span>
     </div>
     <div class="navgroup tools">
       <button id="motionBtn" title="Activar o pausar las animaciones (P)" aria-pressed="false">Animación</button>
-      <button id="notesBtn" title="Notas del expositor (N)" aria-expanded="false">Notas</button>
-      <button id="editBtn">Personalizar</button>
       <button id="helpBtn" title="Ayuda (?)">?</button>
       <button id="fullscreenBtn" title="Pantalla completa (F)">Pantalla completa</button>
     </div>
   </nav>
   <div id="progress" aria-hidden="true"><i></i></div>
-  <aside id="notes" hidden aria-label="Guion del expositor">
-    <div class="noteshead"><strong id="notesTitle"></strong><button id="closeNotes" aria-label="Cerrar notas">×</button></div>
-    <p class="quiet">Las notas se ven en esta pantalla. Ciérralas antes de proyectar.</p>
-    <div id="notesBody"></div>
-  </aside>
   <dialog id="indexDialog"><div class="dialoghead"><h2>Las 20 diapositivas</h2><button data-close aria-label="Cerrar índice">×</button></div><div id="indexList"></div></dialog>
   <dialog id="helpDialog"><div class="dialoghead"><h2>Controles y uso</h2><button data-close aria-label="Cerrar ayuda">×</button></div>
-    <dl class="shortcuts"><dt>← / → · Espacio</dt><dd>Cambiar de diapositiva</dd><dt>A</dt><dd>Avanzar un paso de la demostración actual</dd><dt>P</dt><dd>Activar o pausar animaciones</dd><dt>N</dt><dd>Mostrar u ocultar el guion</dd><dt>O</dt><dd>Abrir el índice</dd><dt>F</dt><dd>Pantalla completa</dd><dt>B</dt><dd>Oscurecer o recuperar la pantalla</dd><dt>Inicio / Fin</dt><dd>Ir a la primera / última diapositiva</dd></dl>
+    <dl class="shortcuts"><dt>← / → · Espacio</dt><dd>Cambiar de diapositiva</dd><dt>A</dt><dd>Avanzar un paso de la demostración actual</dd><dt>P</dt><dd>Activar o pausar animaciones</dd><dt>O</dt><dd>Abrir el índice</dd><dt>F</dt><dd>Pantalla completa</dd><dt>B</dt><dd>Oscurecer o recuperar la pantalla</dd><dt>Inicio / Fin</dt><dd>Ir a la primera / última diapositiva</dd></dl>
     <p>En las demostraciones puedes usar los botones visibles. Las animaciones son esquemas didácticos, no simulaciones físicas dimensionadas.</p>
-    <p><a href="INSTRUCCIONES.html" target="_blank">Abrir instrucciones para verla, editarla y publicarla</a></p>
     <button id="printBtn">Imprimir / guardar PDF estático</button>
   </dialog>
-  <dialog id="editDialog"><form id="editForm"><div class="dialoghead"><h2>Datos y caso de estudio</h2><button type="button" data-close aria-label="Cerrar personalización">×</button></div>
-    <p>Los cambios se guardan en este navegador. Para llevarlos a otro equipo o a GitHub, usa <b>Mostrar configuración</b> y copia el contenido al archivo <b>config.js</b> de la carpeta.</p>
-    <div class="formgrid"><label>Nombre / integrantes<input name="nombre" maxlength="110"></label><label>Fecha<input name="fecha" maxlength="50" placeholder="Ej. 9 de octubre de 2026"></label><label>Curso<input name="curso" maxlength="100"></label><label>Profesor<input name="profesor" maxlength="70"></label></div>
-    <label>Título del caso<input name="caso.titulo" maxlength="85"></label>
-    <label>Empresa o proceso<input name="caso.contexto" maxlength="130"></label>
-    <label>Necesidad<textarea name="caso.necesidad" maxlength="180" rows="2"></textarea></label>
-    <label>Solución neumática<textarea name="caso.solucion" maxlength="220" rows="2"></textarea></label>
-    <label>Resultado documentado o aprendizaje<textarea name="caso.resultado" maxlength="180" rows="2"></textarea></label>
-    <div class="formgrid"><label>Nombre de la fuente<input name="caso.fuenteNombre" maxlength="100"></label><label>Enlace de la fuente<input name="caso.fuenteUrl" type="url" placeholder="https://..."></label></div>
-    <div class="formactions"><button type="submit">Guardar y volver</button><button type="button" id="showConfig">Mostrar configuración</button><button type="button" id="resetConfig">Restaurar archivo original</button></div>
-    <div id="configFallback" hidden><label for="configCode">Copia este texto completo y reemplaza el contenido de config.js<textarea id="configCode" rows="8" readonly spellcheck="false"></textarea></label><p>Selecciona todo el texto del recuadro y cópialo con Ctrl+C. Abre config.js con Bloc de notas, reemplaza su contenido y guarda.</p></div>
-    <p id="editStatus" role="status"></p>
-  </form></dialog>
   <div id="blackout" hidden><button id="unblank">Volver a la presentación (B)</button></div>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
-  <noscript>Activa JavaScript para ver las diapositivas y las animaciones. El archivo GUION.md contiene el contenido y las notas.</noscript>
+  <noscript>Activa JavaScript para ver las diapositivas y las animaciones.</noscript>
   <script src="config.js"></script>
   <script src="slides.js"></script>
   <script src="app.js"></script>

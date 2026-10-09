@@ -1,5 +1,4 @@
-/* Puedes editar este archivo con Bloc de notas. Conserva las comillas y comas.
-   También puedes completar los datos desde el botón «Personalizar» de la presentación. */
+/* Datos públicos de la presentación. Edita los valores conservando comillas y comas. */
 window.PRESENTATION_CONFIG = {
   nombre: "",
   curso: "Sistemas Automatizados de Manufactura",

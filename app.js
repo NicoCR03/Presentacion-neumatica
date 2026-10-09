@@ -2,11 +2,7 @@
  'use strict';
  const $ = (q,root=document)=>root.querySelector(q);
  const $$ = (q,root=document)=>Array.from(root.querySelectorAll(q));
- const original=JSON.parse(JSON.stringify(window.PRESENTATION_CONFIG));
- const key='neumatica-presentation-v1:'+location.pathname;
- let config=JSON.parse(JSON.stringify(original));
- try {const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved)config=mergeConfig(saved);}catch{}
- function mergeConfig(c){return {...original,...c,caso:{...original.caso,...(c.caso||{})}}}
+ const config=JSON.parse(JSON.stringify(window.PRESENTATION_CONFIG));
  let current=0, motion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
  let cyclePhase=0,cycleAuto=false,cycleClock=0,speed=1,progress=0,pieceProgress=0,target=0,direction=false,last=performance.now(),visualTime=0,order=false,remembered=false;
  const stage=$('#stage');
@@ -24,11 +20,8 @@
   $$('.slide').forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',String(i!==current));s.inert=i!==current});
   $$('#indexList button').forEach((b,i)=>b.classList.toggle('active',i===current));
   $('#counter').textContent=`${String(current+1).padStart(2,'0')} / ${total}`;
-  $('#slideTime').textContent=`${SLIDES[current].seconds} s · 12:25 total`;
   $('#prev').disabled=current===0;$('#next').disabled=current===total-1;
   $('#progress i').style.width=`${(current+1)/total*100}%`;
-  $('#notesTitle').textContent=`${current+1}. ${title(current)}`;
-  $('#notesBody').textContent=typeof SLIDES[current].notes==='function'?SLIDES[current].notes(config):SLIDES[current].notes;
   $('#announcer').textContent=`Diapositiva ${current+1} de ${total}: ${title(current)}`;
   document.title=`${current+1} · ${title(current)} · Sistemas neumáticos`;
   cycleAuto=false;cycleClock=0;progress=0;pieceProgress=0;target=0;direction=false;cyclePhase=0;speed=1;order=false;remembered=false;
@@ -88,7 +81,6 @@
   $('#calcDetail').textContent=`${num(p*.1,2)} N/mm² × ${num(area)} mm² ≈ ${num(force)} N`;
  }
  function updateMotion(){document.body.classList.toggle('motion-paused',!motion);$('#motionBtn').setAttribute('aria-pressed',String(motion));$('#motionBtn').textContent=motion?'Pausar animación':'Activar animación'}
- function notesToggle(){const n=$('#notes');n.hidden=!n.hidden;$('#notesBtn').setAttribute('aria-expanded',String(!n.hidden))}
  function openDialog(id){$(id).showModal()}
  function fullscreen(){if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else document.documentElement.requestFullscreen().catch(()=>openDialog('#helpDialog'))}
  function stepAction(){if([3,12,13].includes(current))setCycle((cyclePhase+1)%3);else if(current===6)setValve(1-valvePosition);else if(current===7){if(!order&&!remembered){order=true;remembered=true}else if(order){order=false}else{remembered=false}updateOrder()}}
@@ -107,7 +99,7 @@
  document.addEventListener('input',e=>{if(['pressure','diameter'].includes(e.target.id))updateCalc()});
  $('#prev').onclick=()=>go(current-1);$('#next').onclick=()=>go(current+1);
  $('#indexBtn').onclick=()=>openDialog('#indexDialog');$('#helpBtn').onclick=()=>openDialog('#helpDialog');
- $('#notesBtn').onclick=notesToggle;$('#closeNotes').onclick=notesToggle;$('#fullscreenBtn').onclick=fullscreen;
+ $('#fullscreenBtn').onclick=fullscreen;
  $('#motionBtn').onclick=()=>{motion=!motion;updateMotion()};
  $('#printBtn').onclick=()=>{$('#helpDialog').close();window.print()};
  $('#unblank').onclick=()=>$('#blackout').hidden=true;
@@ -119,7 +111,7 @@
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(current+1)}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(current-1)}
   else if(e.key==='Home'){e.preventDefault();go(0)}else if(e.key==='End'){e.preventDefault();go(total-1)}
-  else if(e.key.toLowerCase()==='n')notesToggle();else if(e.key.toLowerCase()==='f')fullscreen();
+  else if(e.key.toLowerCase()==='f')fullscreen();
   else if(e.key.toLowerCase()==='o')openDialog('#indexDialog');else if(e.key==='?')openDialog('#helpDialog');
   else if(e.key.toLowerCase()==='p'){motion=!motion;updateMotion()}
   else if(e.key.toLowerCase()==='a')stepAction();else if(e.key.toLowerCase()==='b')$('#blackout').hidden=false;
@@ -127,12 +119,6 @@
  let touchStart=null;
  $('#viewport').addEventListener('touchstart',e=>{if(!e.target.closest('button,a,input'))touchStart={x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};else touchStart=null},{passive:true});
  $('#viewport').addEventListener('touchend',e=>{if(!touchStart)return;const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)go(current+(dx<0?1:-1));touchStart=null},{passive:true});
- function readForm(){const form=$('#editForm');const data=new FormData(form);const c={...config,caso:{...config.caso}};for(const [k,v] of data){if(k.startsWith('caso.'))c.caso[k.slice(5)]=v.trim();else c[k]=v.trim()}return c}
- function fillForm(){for(const el of $$('#editForm [name]'))el.value=el.name.startsWith('caso.')?config.caso[el.name.slice(5)]||'':config[el.name]||''}
- $('#editBtn').onclick=()=>{fillForm();$('#editStatus').textContent='';$('#configFallback').hidden=true;openDialog('#editDialog')};
- $('#editForm').addEventListener('submit',e=>{e.preventDefault();config=readForm();try{localStorage.setItem(key,JSON.stringify(config))}catch{}render();$('#editDialog').close()});
- $('#showConfig').onclick=()=>{if(!$('#editForm').reportValidity())return;$('#configFallback').hidden=false;$('#configCode').value='// Datos de la presentación\nwindow.PRESENTATION_CONFIG = '+JSON.stringify(readForm(),null,2)+';\n';$('#configCode').focus();$('#configCode').select();$('#editStatus').textContent='Texto seleccionado. Usa Ctrl+C y pégalo en el archivo config.js.'};
- $('#resetConfig').onclick=()=>{config=JSON.parse(JSON.stringify(original));try{localStorage.removeItem(key)}catch{}fillForm();render();$('#editStatus').textContent='Restaurados los datos del archivo config.js.'};
  window.addEventListener('resize',fit);window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1),10);if(Number.isFinite(n))go(n-1,false)});
  document.addEventListener('fullscreenchange',fit);
  window.addEventListener('beforeprint',()=>{motion=false;updateMotion();$$('.slide').forEach(s=>s.inert=false)});
