@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#112b35">
   <title>Sistemas neumáticos · Presentación</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <main id="viewport" aria-label="Presentación de sistemas neumáticos">
@@ -14,8 +14,9 @@
   <nav id="toolbar" aria-label="Controles de presentación">
     <div class="navgroup">
       <button id="prev" title="Anterior (←)" aria-label="Diapositiva anterior">←</button>
-      <button id="indexBtn" title="Índice (O)"><span id="counter">01 / 20</span></button>
+      <button id="indexBtn" title="Índice (O)"><span id="counter">01 / 23</span></button>
       <button id="next" title="Siguiente (→ o espacio)" aria-label="Diapositiva siguiente">→</button>
+      <span id="slideTime" class="quiet"></span>
     </div>
     <div class="navgroup tools">
       <button id="motionBtn" title="Activar o pausar las animaciones (P)" aria-pressed="false">Animación</button>
@@ -24,7 +25,7 @@
     </div>
   </nav>
   <div id="progress" aria-hidden="true"><i></i></div>
-  <dialog id="indexDialog"><div class="dialoghead"><h2>Las 20 diapositivas</h2><button data-close aria-label="Cerrar índice">×</button></div><div id="indexList"></div></dialog>
+  <dialog id="indexDialog"><div class="dialoghead"><h2>Las 23 diapositivas</h2><button data-close aria-label="Cerrar índice">×</button></div><div id="indexList"></div></dialog>
   <dialog id="helpDialog"><div class="dialoghead"><h2>Controles y uso</h2><button data-close aria-label="Cerrar ayuda">×</button></div>
     <dl class="shortcuts"><dt>← / → · Espacio</dt><dd>Cambiar de diapositiva</dd><dt>A</dt><dd>Avanzar un paso de la demostración actual</dd><dt>P</dt><dd>Activar o pausar animaciones</dd><dt>O</dt><dd>Abrir el índice</dd><dt>F</dt><dd>Pantalla completa</dd><dt>B</dt><dd>Oscurecer o recuperar la pantalla</dd><dt>Inicio / Fin</dt><dd>Ir a la primera / última diapositiva</dd></dl>
     <p>En las demostraciones puedes usar los botones visibles. Las animaciones son esquemas didácticos, no simulaciones físicas dimensionadas.</p>
@@ -32,9 +33,9 @@
   </dialog>
   <div id="blackout" hidden><button id="unblank">Volver a la presentación (B)</button></div>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
-  <noscript>Activa JavaScript para ver las diapositivas y las animaciones.</noscript>
-  <script src="config.js"></script>
-  <script src="slides.js"></script>
-  <script src="app.js"></script>
+  <noscript>Activa JavaScript para ver las diapositivas y las animaciones. </noscript>
+  <script src="config.js?v=5"></script>
+  <script src="slides.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

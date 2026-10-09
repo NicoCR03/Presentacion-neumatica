@@ -11,3 +11,28 @@
 @media print{@page{size:16in 9in;margin:0}body{background:white}#viewport{height:auto;overflow:visible;display:block}#stage{width:1600px;height:auto;transform:none!important}.slide,.slide.active{position:relative;display:flex!important;width:1600px;height:900px;page-break-after:always;break-after:page;animation:none!important;zoom:.96;-webkit-print-color-adjust:exact;print-color-adjust:exact}.slide:last-child{break-after:auto}#toolbar,#progress,#notes,dialog,#blackout,.scene-controls,.calc-controls input,.print-hide{display:none!important}.print-only{display:block}.body{overflow:hidden}a{text-decoration:none}.diagram .flow,.pulse-dot{animation:none}.foot{bottom:20px}}
 
 .slide[data-slide="18"] h2{font-size:48px}.slide[data-slide="18"] .case-grid{gap:25px 60px}.slide[data-slide="18"] .case-grid p{font-size:25px;line-height:1.3}.slide[data-slide="18"] .case-grid .small{font-size:21px}
+
+/* Referencias APA: sangría francesa y URLs completas solo al final. */
+.apa-list{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(3,auto);gap:26px 54px;align-content:start}.apa-entry{font-size:22px;line-height:1.38;padding-left:28px;text-indent:-28px;overflow-wrap:anywhere}.apa-entry a{font-size:19px;color:var(--teal)}.case-reference{font-size:19px;line-height:1.35;margin-top:22px!important;overflow-wrap:anywhere}
+
+.ai-credit{font-size:18px;color:#bbd1d3;margin-top:24px!important}
+.contents-list{max-width:1100px;margin:20px auto;display:grid;gap:30px}.contents-list>div{display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:start}.contents-list span{font-size:38px;color:var(--teal)}.contents-list h3{font-size:33px}.contents-list p{font-size:25px;margin-top:7px;color:var(--muted)}
+.definitions{display:flex;gap:40px;background:#e9eee5;padding:14px 20px;margin-bottom:12px;font-size:23px;line-height:1.35}.definitions p{flex:1}.slide[data-kind="valves"] .compare svg{max-height:252px}.slide[data-kind="valves"] .compare p{margin-top:10px;font-size:22px}.slide[data-kind="valves"] .annotation{font-size:17px}.slide[data-kind="valves"] .scene-controls{margin-top:8px}
+.relation-box{margin-top:30px}.relation-box p{font-size:27px}
+.actuator-overview{height:100%;display:flex;flex-direction:column;justify-content:center}.overview-lead{font-size:31px;line-height:1.35;text-align:center;margin-bottom:42px!important}.actuator-overview .three{align-items:center;text-align:center}.actuator-caption{text-align:center;font-size:23px;color:var(--muted);margin-top:42px!important}
+.cylinder-demo svg{width:100%;height:240px}.cylinder-demo .scene-controls{justify-content:center}.cylinder-demo [data-demo-piston]{transition:none}.slide[data-kind="cylinders"] .compare p{font-size:25px}.slide[data-kind="cylinders"] .takeaway{font-size:26px}
+.requirements svg{height:200px}.calculation-assumptions{font-size:25px;line-height:1.35;margin-top:32px!important}.calc-grid{gap:70px}.calc-controls label{margin:12px 0}
+.industry-examples{height:90%;align-items:center}.industry-examples h3{font-size:29px}.industry-examples p{font-size:24px}.industry-examples p:first-of-type{color:var(--teal);font-size:21px}.industry-examples svg{height:230px}
+.innovation-layout{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;height:100%;max-width:1320px;margin:auto}.innovation-layout .terminal{justify-content:center;margin-top:0}.innovation-layout .big{font-size:37px;text-align:center;margin-top:30px!important}.innovation-layout .annotation{text-align:center}.innovation-layout .steps li{font-size:27px}.innovation-layout .steps small{font-size:23px}
+.center-conclusions{height:100%;display:flex;align-items:center;justify-content:center}.center-conclusions .numbered-findings{max-width:1200px;margin:0}
+.apa-list{grid-template-rows:repeat(4,auto);gap:17px 45px}.apa-entry{font-size:20px;line-height:1.32}.apa-entry a{font-size:17px}
+#notesBody{white-space:pre-wrap}
+
+/* Evita que el enfoque de los botones desplace el lienzo escalado. */
+@media screen{#viewport{overflow:clip}}
+
+.scope-detail{font-size:20px;line-height:1.3;margin-top:14px!important}.industry-examples p:first-of-type{font-size:24px;color:var(--ink)}
+
+.slide[data-original="5"] .flow-definition{font-size:23px;margin-top:16px}.slide[data-original="5"] .relation-box{margin-top:18px}.slide[data-original="5"] .svgwrap svg{max-height:220px}.slide[data-original="5"] .force-summary{font-size:24px;line-height:1.3;margin-top:16px}
+
+.case-complete{margin-top:30px;gap:30px 45px}.case-complete p{font-size:26px;line-height:1.4}.thanks{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}.thanks h3{font-size:100px;color:var(--teal)}.thanks p{font-size:28px;margin-top:35px}.slide[data-kind="thanks"] header{display:none}

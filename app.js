@@ -2,14 +2,17 @@
  'use strict';
  const $ = (q,root=document)=>root.querySelector(q);
  const $$ = (q,root=document)=>Array.from(root.querySelectorAll(q));
- const config=JSON.parse(JSON.stringify(window.PRESENTATION_CONFIG));
+ const original=JSON.parse(JSON.stringify(window.PRESENTATION_CONFIG));
+ const key='neumatica-preliminar-20261009:'+location.pathname;
+ let config=JSON.parse(JSON.stringify(original));
+ function mergeConfig(c){return {...original,...c,caso:{...original.caso,...(c.caso||{})}}}
  let current=0, motion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
  let cyclePhase=0,cycleAuto=false,cycleClock=0,speed=1,progress=0,pieceProgress=0,target=0,direction=false,last=performance.now(),visualTime=0,order=false,remembered=false;
  const stage=$('#stage');
  const total=SLIDES.length;
- function title(i){return i===17 ? config.caso.titulo||'Caso de estudio':SLIDES[i].title}
+ function title(i){return SLIDES[i].kind==='case' ? config.caso.titulo||'Caso de estudio':SLIDES[i].title}
  function render(){
-  stage.innerHTML=SLIDES.map((s,i)=>`<section class="slide ${s.dark?'dark':''} ${s.layout==='cover'?'cover-slide':''}" data-slide="${i+1}" aria-label="${i+1}. ${esc(title(i))}" aria-hidden="true">${s.layout==='cover'?'':`<header><p class="eyebrow">${esc(s.section)}</p><h2>${esc(title(i))}</h2>${s.subtitle?`<p class="subtitle">${esc(s.subtitle)}</p>`:''}</header>`}<div class="body">${s.body(config)}</div><footer class="foot"><div class="sources">${i===17&&config.caso.solucion?(safeUrl(config.caso.fuenteUrl)?`<a href="${esc(safeUrl(config.caso.fuenteUrl))}" target="_blank" rel="noopener">${esc(config.caso.fuenteNombre||'Fuente del caso')}</a>`:esc(config.caso.fuenteNombre||'Completar la fuente del caso')):s.sources||'Sistemas Automatizados de Manufactura'}</div><span class="pageno">${String(i+1).padStart(2,'0')} / 20</span></footer></section>`).join('');
+  stage.innerHTML=SLIDES.map((s,i)=>`<section class="slide ${s.dark?'dark':''} ${s.layout==='cover'?'cover-slide':''}" data-slide="${i+1}" data-kind="${s.kind}" data-original="${s.originalNumber||0}" aria-label="${i+1}. ${esc(title(i))}" aria-hidden="true">${s.layout==='cover'?'':`<header><p class="eyebrow">${esc(s.section)}</p><h2>${esc(title(i))}</h2>${s.subtitle?`<p class="subtitle">${esc(s.subtitle)}</p>`:''}</header>`}<div class="body">${s.body(config)}</div><footer class="foot"><div class="sources">Sistemas Automatizados de Manufactura</div><span class="pageno">${String(i+1).padStart(2,'0')} / ${total}</span></footer></section>`).join('');
   $('#indexList').innerHTML=SLIDES.map((s,i)=>`<button data-go="${i}">${String(i+1).padStart(2,'0')} · ${esc(title(i))}</button>`).join('');
   go(current,false);updateCalc();updateMotion();
  }
@@ -20,12 +23,13 @@
   $$('.slide').forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',String(i!==current));s.inert=i!==current});
   $$('#indexList button').forEach((b,i)=>b.classList.toggle('active',i===current));
   $('#counter').textContent=`${String(current+1).padStart(2,'0')} / ${total}`;
+  $('#slideTime').textContent=`${SLIDES[current].seconds} s · ${Math.floor(SLIDES.reduce((a,s)=>a+s.seconds,0)/60)}:${String(SLIDES.reduce((a,s)=>a+s.seconds,0)%60).padStart(2,'0')} estimados`;
   $('#prev').disabled=current===0;$('#next').disabled=current===total-1;
   $('#progress i').style.width=`${(current+1)/total*100}%`;
   $('#announcer').textContent=`Diapositiva ${current+1} de ${total}: ${title(current)}`;
   document.title=`${current+1} · ${title(current)} · Sistemas neumáticos`;
   cycleAuto=false;cycleClock=0;progress=0;pieceProgress=0;target=0;direction=false;cyclePhase=0;speed=1;order=false;remembered=false;
-  setCycle(0,false);setValve(0);updateOrder();
+  setCycle(0,false);setValve(0);updateOrder();resetCylinders();
   $$('[data-speed]',active()).forEach(b=>b.classList.toggle('selected',b.dataset.speed==='1'));
   if(hash&&location.hash!==`#${current+1}`)history.replaceState(null,'',`#${current+1}`);
   fit();
@@ -56,6 +60,25 @@
   root.classList.toggle('air-moving',Math.abs(target-progress)>.001);
   $$('.flow',root).forEach(p=>{const moving=Math.abs(target-progress)>.001;p.style.opacity=moving?'1':'0';p.style.animationPlayState=moving?'running':'paused'});
  }
+
+ const demoStates={single:{p:0,target:0},double:{p:0,target:0}};
+ function resetCylinders(){for(const [id,s] of Object.entries(demoStates)){s.p=0;s.target=0;drawCylinder(id,s)}}
+ function setCylinder(id,t){const s=demoStates[id];if(!s)return;s.target=t;if(!motion)s.p=t;drawCylinder(id,s)}
+ function drawCylinder(id,s){
+  const root=$('[data-cylinder="'+id+'"]');if(!root)return;
+  const dx=s.p*140;
+  $('[data-demo-piston]',root).setAttribute('transform','translate('+dx+' 0)');
+  const left=$('[data-demo-left]',root),right=$('[data-demo-right]',root);
+  left.setAttribute('width',58+dx);right.setAttribute('x',123+dx);right.setAttribute('width',208-dx);
+  left.style.fill=s.target?'#087cb533':'#c0592f22';right.style.fill=id==='double'&&!s.target?'#087cb533':'#c0592f22';
+  $('[data-demo-in]',root).style.stroke=s.target?'#087cb5':'#c0592f';
+  if(id==='single'){
+   const start=125+dx,end=328;let d='M'+start+' 149';for(let i=1;i<11;i++)d+='L'+(start+(end-start)*i/11)+' '+(i%2?137:161);d+='L328 149';$('[data-demo-spring]',root).setAttribute('d',d);
+  }else $('[data-demo-out]',root).style.stroke=s.target?'#c0592f':'#087cb5';
+  $('[data-demo-state]',root).textContent=id==='single'?(s.target?'Aire entra; el resorte se comprime':'Aire sale; el resorte produce el retorno'):(s.target?'Aire entra por A y sale por B':'Aire entra por B y sale por A');
+  $$('[data-cylinder-target]',root).forEach(b=>b.classList.toggle('selected',Number(b.dataset.cylinderTarget)===s.target));
+ }
+
  let valvePosition=0;
  function setValve(n){
   valvePosition=n;
@@ -83,12 +106,13 @@
  function updateMotion(){document.body.classList.toggle('motion-paused',!motion);$('#motionBtn').setAttribute('aria-pressed',String(motion));$('#motionBtn').textContent=motion?'Pausar animación':'Activar animación'}
  function openDialog(id){$(id).showModal()}
  function fullscreen(){if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else document.documentElement.requestFullscreen().catch(()=>openDialog('#helpDialog'))}
- function stepAction(){if([3,12,13].includes(current))setCycle((cyclePhase+1)%3);else if(current===6)setValve(1-valvePosition);else if(current===7){if(!order&&!remembered){order=true;remembered=true}else if(order){order=false}else{remembered=false}updateOrder()}}
+ function stepAction(){if(SLIDES[current].kind==='cycle')setCycle((cyclePhase+1)%3);else if(SLIDES[current].kind==='valves')setValve(1-valvePosition);else if(SLIDES[current].kind==='orders'){if(!order&&!remembered){order=true;remembered=true}else if(order){order=false}else{remembered=false}updateOrder()}}
  document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.matches('[data-close]'))b.closest('dialog').close();
   if(b.hasAttribute('data-go')){go(Number(b.dataset.go));$('#indexDialog').close()}
   if(b.hasAttribute('data-next'))go(current+1);
+  if(b.hasAttribute('data-cylinder-id'))setCylinder(b.dataset.cylinderId,Number(b.dataset.cylinderTarget));
   if(b.hasAttribute('data-cycle'))setCycle(Number(b.dataset.cycle));
   if(b.hasAttribute('data-valve-position'))setValve(Number(b.dataset.valvePosition));
   if(b.hasAttribute('data-auto-cycle')){cycleAuto=!cycleAuto;cycleClock=0;if(cycleAuto){motion=true;updateMotion();setCycle(1,false)}else setCycle(cyclePhase,false)}
@@ -127,6 +151,7 @@
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(motion&&!document.hidden){
    visualTime+=dt;
+   for(const [id,s] of Object.entries(demoStates)){const delta=s.target-s.p;s.p+=Math.sign(delta)*Math.min(Math.abs(delta),dt*.7);drawCylinder(id,s)}
    if(cycleAuto){cycleClock+=dt*speed;const t=cycleClock%6.5;const phase=t<2.6?1:t<5.2?2:0;if(phase!==cyclePhase)setCycle(phase,false)}
    const delta=target-progress;progress+=Math.sign(delta)*Math.min(Math.abs(delta),dt*.52*speed);
    drawMachine(active(),progress,direction);
