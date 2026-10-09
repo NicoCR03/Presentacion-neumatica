@@ -228,6 +228,10 @@ change(19,{body:()=>'<div class="center-conclusions"><div class="numbered-findin
 ].map(([t,d],i)=>'<div class="finding"><span class="number">0'+(i+1)+'</span><div><h3>'+t+'</h3><p>'+d+'</p></div></div>').join('')+'</div></div>'});
 SLIDES.filter(s=>s.originalNumber===20).forEach(s=>s.subtitle='');
 
+// Se retira la diapositiva de cálculo de fuerza (original 11).
+const removedForceIndex=SLIDES.findIndex(s=>s.originalNumber===11);
+if(removedForceIndex!==-1)SLIDES.splice(removedForceIndex,1);
+
 /* Solo texto para exponer. Las explicaciones adicionales están en ACLARACIONES.md. */
 window.SPOKEN_NOTES = {
   '1': `Buenos días. Soy Nicolás Donoso y voy a presentar los sistemas neumáticos, con énfasis en las válvulas, los cilindros y otros actuadores. Nos vamos a concentrar en cómo una máquina utiliza el aire comprimido para realizar una operación.`,
