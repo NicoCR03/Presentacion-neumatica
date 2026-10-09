@@ -23,7 +23,6 @@
   $$('.slide').forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',String(i!==current));s.inert=i!==current});
   $$('#indexList button').forEach((b,i)=>b.classList.toggle('active',i===current));
   $('#counter').textContent=`${String(current+1).padStart(2,'0')} / ${total}`;
-  $('#slideTime').textContent=`${SLIDES[current].seconds} s · ${Math.floor(SLIDES.reduce((a,s)=>a+s.seconds,0)/60)}:${String(SLIDES.reduce((a,s)=>a+s.seconds,0)%60).padStart(2,'0')} estimados`;
   $('#prev').disabled=current===0;$('#next').disabled=current===total-1;
   $('#progress i').style.width=`${(current+1)/total*100}%`;
   $('#announcer').textContent=`Diapositiva ${current+1} de ${total}: ${title(current)}`;
@@ -125,7 +124,8 @@
  $('#indexBtn').onclick=()=>openDialog('#indexDialog');$('#helpBtn').onclick=()=>openDialog('#helpDialog');
  $('#fullscreenBtn').onclick=fullscreen;
  $('#motionBtn').onclick=()=>{motion=!motion;updateMotion()};
- $('#printBtn').onclick=()=>{$('#helpDialog').close();window.print()};
+ function exportPdf(){if($('#helpDialog').open)$('#helpDialog').close();window.print()}
+ $('#printBtn').onclick=exportPdf;$('#downloadPdfBtn').onclick=exportPdf;
  $('#unblank').onclick=()=>$('#blackout').hidden=true;
  document.addEventListener('keydown',e=>{
   if(e.target.closest('input,textarea,select')||e.ctrlKey||e.metaKey||e.altKey)return;
@@ -145,8 +145,9 @@
  $('#viewport').addEventListener('touchend',e=>{if(!touchStart)return;const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)go(current+(dx<0?1:-1));touchStart=null},{passive:true});
  window.addEventListener('resize',fit);window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1),10);if(Number.isFinite(n))go(n-1,false)});
  document.addEventListener('fullscreenchange',fit);
- window.addEventListener('beforeprint',()=>{motion=false;updateMotion();$$('.slide').forEach(s=>s.inert=false)});
- window.addEventListener('afterprint',()=>$$('.slide').forEach((s,i)=>s.inert=i!==current));
+ let motionBeforePrint=motion;
+ window.addEventListener('beforeprint',()=>{motionBeforePrint=motion;motion=false;updateMotion();$('.slide').forEach(s=>s.inert=false)});
+ window.addEventListener('afterprint',()=>{motion=motionBeforePrint;updateMotion();$('.slide').forEach((s,i)=>s.inert=i!==current)});
  function tick(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(motion&&!document.hidden){

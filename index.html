@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#112b35">
   <title>Sistemas neumáticos · Presentación</title>
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <main id="viewport" aria-label="Presentación de sistemas neumáticos">
@@ -16,10 +16,10 @@
       <button id="prev" title="Anterior (←)" aria-label="Diapositiva anterior">←</button>
       <button id="indexBtn" title="Índice (O)"><span id="counter">01 / 23</span></button>
       <button id="next" title="Siguiente (→ o espacio)" aria-label="Diapositiva siguiente">→</button>
-      <span id="slideTime" class="quiet"></span>
     </div>
     <div class="navgroup tools">
       <button id="motionBtn" title="Activar o pausar las animaciones (P)" aria-pressed="false">Animación</button>
+      <button id="downloadPdfBtn" title="Abre la impresión: selecciona Guardar como PDF">Descargar PDF</button>
       <button id="helpBtn" title="Ayuda (?)">?</button>
       <button id="fullscreenBtn" title="Pantalla completa (F)">Pantalla completa</button>
     </div>
@@ -29,13 +29,13 @@
   <dialog id="helpDialog"><div class="dialoghead"><h2>Controles y uso</h2><button data-close aria-label="Cerrar ayuda">×</button></div>
     <dl class="shortcuts"><dt>← / → · Espacio</dt><dd>Cambiar de diapositiva</dd><dt>A</dt><dd>Avanzar un paso de la demostración actual</dd><dt>P</dt><dd>Activar o pausar animaciones</dd><dt>O</dt><dd>Abrir el índice</dd><dt>F</dt><dd>Pantalla completa</dd><dt>B</dt><dd>Oscurecer o recuperar la pantalla</dd><dt>Inicio / Fin</dt><dd>Ir a la primera / última diapositiva</dd></dl>
     <p>En las demostraciones puedes usar los botones visibles. Las animaciones son esquemas didácticos, no simulaciones físicas dimensionadas.</p>
-    <button id="printBtn">Imprimir / guardar PDF estático</button>
+    <p>Para descargar las 23 diapositivas, pulsa «Descargar PDF» y selecciona «Guardar como PDF» en el destino de impresión. El PDF contiene imágenes estáticas de las diapositivas.</p><button id="printBtn">Guardar como PDF</button>
   </dialog>
   <div id="blackout" hidden><button id="unblank">Volver a la presentación (B)</button></div>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
   <noscript>Activa JavaScript para ver las diapositivas y las animaciones. </noscript>
-  <script src="config.js?v=5"></script>
-  <script src="slides.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <script src="config.js?v=6"></script>
+  <script src="slides.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>
