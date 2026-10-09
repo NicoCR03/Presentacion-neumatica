@@ -208,6 +208,26 @@ refSlides[0].body=()=>apaList(0,8);refSlides[1].body=()=>apaList(8,16);
 SLIDES.splice(SLIDES.indexOf(refSlides[0]),0,{...block('Cierre','Muchas gracias',()=>'<div class="thanks"><h3>Muchas gracias</h3><p>Nicolás Donoso Calvo · C22625</p></div>'),kind:'thanks',originalNumber:null,seconds:5,notes:'Muchas gracias.'});
 const contentsSlide=SLIDES.find(s=>s.kind==='contents');const previousContents=contentsSlide.body;contentsSlide.body=c=>previousContents(c).replace('Aplicación por incorporar y referencias.','Manipulación de ostras y referencias.');
 
+// Ejemplos genéricos y conclusiones alineadas con el guion final.
+function genericMachine(type){
+ let drawing='';
+ if(type==='press')drawing='<path class="hardware" d="M65 220V35H310V220H285V65H90V220Z"/><rect class="hardware" x="155" y="65" width="65" height="60"/><rect class="metal" x="180" y="125" width="16" height="35"/><rect class="metal" x="125" y="160" width="125" height="18"/><rect x="145" y="192" width="85" height="18" fill="#cc7948"/><path class="line" d="M100 213H275"/><path class="pipe" d="M25 95H155"/>';
+ if(type==='assembly')drawing='<rect class="hardware" x="45" y="170" width="285" height="25"/><rect class="hardware" x="65" y="112" width="75" height="45"/><rect class="metal" x="140" y="128" width="44" height="13"/><rect x="184" y="120" width="70" height="45" fill="#cc7948"/><path class="hardware" d="M258 109H280V170H258Z"/><path class="pipe" d="M25 137H65"/><path class="line" d="M85 195V230M300 195V230"/>';
+ if(type==='pack')drawing='<rect class="hardware" x="35" y="185" width="310" height="24"/><circle class="metal" cx="65" cy="198" r="9"/><circle class="metal" cx="310" cy="198" r="9"/><path d="M220 185V105H315V185M220 105L198 80M315 105L337 80" fill="#cc794844" stroke="#c0592f" stroke-width="4"/><rect class="hardware" x="35" y="112" width="70" height="40"/><rect class="metal" x="105" y="126" width="42" height="12"/><rect x="147" y="113" width="50" height="68" fill="#cc7948"/><path class="pipe" d="M15 132H35"/>';
+ return svgStart('generic-'+type,'0 0 380 260')+drawing+'</svg>';
+}
+change(15,{body:()=>'<div class="three industry-examples">'+[
+ ['press','Prensa neumática','Un cilindro presiona una pieza para unirla o darle forma.'],
+ ['assembly','Máquina de ensamblaje','Los actuadores sujetan y colocan piezas durante el montaje.'],
+ ['pack','Máquina de empaque','Los cilindros empujan productos y cierran mecanismos del empaque.']
+].map(([k,t,d])=>'<div><div class="svgwrap">'+genericMachine(k)+'</div><h3>'+t+'</h3><p>'+d+'</p></div>').join('')+'</div>'});
+change(19,{body:()=>'<div class="center-conclusions"><div class="numbered-findings">'+[
+ ['Las válvulas controlan el recorrido del aire.','Los actuadores convierten su energía en trabajo mecánico.'],
+ ['Los componentes trabajan juntos.','La fuerza del vástago, su velocidad y la secuencia dependen de cómo se combinan y controlan.'],
+ ['El sistema debe responder a la operación.','Para implementarlo, se consideran las necesidades del proceso, sus costos y sus limitaciones.']
+].map(([t,d],i)=>'<div class="finding"><span class="number">0'+(i+1)+'</span><div><h3>'+t+'</h3><p>'+d+'</p></div></div>').join('')+'</div></div>'});
+SLIDES.filter(s=>s.originalNumber===20).forEach(s=>s.subtitle='');
+
 /* Solo texto para exponer. Las explicaciones adicionales están en ACLARACIONES.md. */
 window.SPOKEN_NOTES = {
   '1': `Buenos días. Soy Nicolás Donoso y voy a presentar los sistemas neumáticos, con énfasis en las válvulas, los cilindros y otros actuadores. Nos vamos a concentrar en cómo una máquina utiliza el aire comprimido para realizar una operación.`,
@@ -235,7 +255,7 @@ Ese control decide cuándo enviar corriente a la bobina de la válvula.
 La bobina acciona la válvula, cambia el recorrido del aire y el cilindro avanza.
 [acción: pulsar «Retirar orden»]
 En este ejemplo monoestable, el cilindro retorna. Un sensor puede confirmar que terminó el recorrido antes de permitir la siguiente operación.`,
-  '15': "Veamos tres máquinas y qué hace el aire comprimido en cada una.\nEn una llenadora de frascos por vacío, el aire comprimido alimenta una bomba que extrae aire del envase. Al bajar la presión dentro del frasco, la diferencia de presión hace entrar el líquido desde el depósito.\nEn una selladora de bolsas, el sistema neumático cierra y aprieta las barras contra el plástico. Una resistencia eléctrica produce el calor que une las capas de la bolsa.\nUna remachadora une, por ejemplo, dos láminas metálicas. El remache pasa por un agujero en ambas, y la herramienta lo deforma para que queden sujetas. El accionamiento neumático aporta la fuerza para realizar esa operación.",
+  '15': "Veamos tres tipos de máquinas que pueden utilizar sistemas neumáticos. En una prensa neumática, un cilindro hace bajar la parte que presiona la pieza, por ejemplo para unirla o darle forma. En una máquina de ensamblaje, los actuadores pueden sujetar una pieza y colocar otra en la posición necesaria para montarlas. En una máquina de empaque, los cilindros pueden empujar productos hacia una caja o cerrar mecanismos que participan en el empaque. En los tres casos, las válvulas controlan el aire y los actuadores realizan movimientos repetitivos dentro de la máquina.",
   '16': "Un sistema neumático puede convenir para movimientos rápidos, repetitivos y sencillos. En ciertas tareas, su inversión inicial puede ser menor, especialmente si la planta ya tiene suministro de aire.\nPero hay costos de energía, mantenimiento, fugas y ruido. También importa dónde necesitamos detener el vástago. Pensemos en uno que recorre diez centímetros: un circuito sencillo puede hacerlo salir hasta el final y regresar hasta el inicio. Detenerlo exactamente a cuatro centímetros, una y otra vez, requiere un control más avanzado. El aire se comprime y la posición puede cambiar con la carga.\nPor eso debemos comparar la operación que necesitamos y el costo total del sistema.",
   '17': `Una forma sencilla de entender las innovaciones es pensar en automatización y conexión. Con sensores y un controlador, la máquina puede coordinar sus válvulas y cilindros para repetir una secuencia automáticamente.
 El IIoT significa Internet industrial de las cosas. Permite compartir datos de la máquina, como la presión, el consumo de aire o la cantidad de ciclos, y consultarlos en una pantalla de supervisión.
