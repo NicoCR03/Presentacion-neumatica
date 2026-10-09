@@ -146,8 +146,8 @@
  window.addEventListener('resize',fit);window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1),10);if(Number.isFinite(n))go(n-1,false)});
  document.addEventListener('fullscreenchange',fit);
  let motionBeforePrint=motion;
- window.addEventListener('beforeprint',()=>{motionBeforePrint=motion;motion=false;updateMotion();$('.slide').forEach(s=>s.inert=false)});
- window.addEventListener('afterprint',()=>{motion=motionBeforePrint;updateMotion();$('.slide').forEach((s,i)=>s.inert=i!==current)});
+ window.addEventListener('beforeprint',()=>{motionBeforePrint=motion;motion=false;updateMotion();$$('.slide').forEach(s=>s.inert=false)});
+ window.addEventListener('afterprint',()=>{motion=motionBeforePrint;updateMotion();$$('.slide').forEach((s,i)=>s.inert=i!==current)});
  function tick(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(motion&&!document.hidden){
